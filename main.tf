@@ -79,6 +79,13 @@ resource "aws_ssm_parameter" "docdb_url_user" {
   value = "mongodb://${data.aws_ssm_parameter.DB_ADMIN_USER.value}:${data.aws_ssm_parameter.DB_ADMIN_PASS.value}@${aws_docdb_cluster.docdb.endpoint}:27017/users?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false"
 }
 
+# this parameter is created for reffering docdb cluster endpoint to mongodb schema
+resource "aws_ssm_parameter" "docdb_url" {
+  name  = "${var.env}.docdb.DOCDB_URL"
+  type  = "String"
+  value = aws_docdb_cluster.docdb.endpoint
+}
+
 # we are creating parameters for ansible playbook service files with mongodb (catalogue.service, user.service etc..,)
 #'mongodb://username:password@mongodb:27017/catalogue?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false';
 #                             mongodb is a endpoint
